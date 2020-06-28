@@ -15,7 +15,7 @@ In terminal run `wget https://raw.githubusercontent.com/Workbench-tools/docker-s
 
 Install by running `./install.sh {/var/www/application-name}`. If you will be asked for permissions run `sudo bash install.sh {/var/www/application-name}` instead.
 
-This will install micro service based application if you want website use `--web` option `./install.sh {/var/www/application-name} --web`. For more information use `--help` option.
+This will install micro service based application. If you want website use `--web` option `./install.sh {/var/www/application-name} --web`. For more information use `--help` option.
 
 CD into application folder `cd /var/www/application-name`
 
