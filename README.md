@@ -13,8 +13,9 @@ Assume that docker and docker-compose runs on your machine.
 
 In terminal run `wget https://raw.githubusercontent.com/Workbench-tools/docker-symfony/master/install.sh` to download installation file.
 
-Install by running `./install.sh {/var/www/application-name}`
-if you will be asked for permissions run `sudo bash install.sh {/var/www/application-name}`
+Install by running `./install.sh {/var/www/application-name}`.
+
+If you will be asked for permissions run `sudo bash install.sh {/var/www/application-name}`
 
 CD into application folder `cd /var/www/application-name`
 
