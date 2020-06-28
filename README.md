@@ -9,7 +9,7 @@ docker and docker-compose runs on your machine
 
 ---
 
-In terminal run `wget https://github.com/Workbench-tools/docker-symfony/blob/master/install.sh` to download installation file.
+In terminal run `wget https://raw.githubusercontent.com/Workbench-tools/docker-symfony/master/install.sh` to download installation file.
 
 Install by running `./install.sh {/var/www/application-name}`
 

@@ -34,6 +34,11 @@ while [ "$1" != "" ]; do
     shift
 done
 
+if [ $1 = '' ]; then
+  echo 'Please provide application name'
+  exit 0;
+fi
+
 if [ $web = 0 ]; then
   symfony_application="symfony/skeleton"
 else
