@@ -1,15 +1,35 @@
 #!/usr/bin/env bash
 
-echo 'Installation has started...'
+help_option()
+{
+  echo
+  echo '**********************************************'
+  echo '* Symfony installation and setup with docker *'
+  echo '**********************************************'
+  echo
+  echo 'Usage: ./install.sh path [OPTION]'
+  echo 'Installs Symfony application and setup docker with PHP, NginX and MySQL.'
+  echo
+  echo 'Optional parameters:'
+  echo "-w, --web       Installs full web application. 'symfony/website-skeleton'."
+  echo "                If this option is not provided 'symfony/skeleton' are used."
+  echo '-h, --help      Information.'
+  echo
+
+  exit 0;
+}
 
 web=0
 application_full_path=$1
 
 while [ "$1" != "" ]; do
     case $1 in
-        -w | --web )           shift
-                                web=1
-                                ;;
+        -w | --web ) shift
+            web=1
+            ;;
+        -h | --help )
+            help_option
+            ;;
     esac
     shift
 done
@@ -20,13 +40,24 @@ else
   symfony_application="symfony/website-skeleton"
 fi
 
+echo 'Installation has started...'
+
 composer create-project $symfony_application $application_full_path
 
 application_name=$(basename $application_full_path)
-
-docker_compose_file="${application_full_path}/docker-compose.yml"
-
 container_name="${application_name//-/_}"
+docker_compose_file="${application_full_path}/docker-compose.yml"
+docker_nginx_dir=${application_full_path}/docker/build/nginx/
+docker_php_dir=${application_full_path}/docker/build/php/
+init_file=${application_full_path}/init.sh
+
+mkdir ${application_full_path}/docker
+mkdir ${application_full_path}/docker/build
+mkdir $docker_nginx_dir
+mkdir $docker_php_dir
+
+docker_nginx_config="${docker_nginx_dir}/default.conf"
+docker_php_file="${docker_php_dir}/Dockerfile"
 
 cat > $docker_compose_file <<EOF
 version: '3.5'
@@ -65,17 +96,6 @@ services:
           - php_${container_name}
           - mysql_${container_name}
 EOF
-
-docker_nginx_dir=${application_full_path}/docker/build/nginx/
-docker_php_dir=${application_full_path}/docker/build/php/
-
-mkdir ${application_full_path}/docker
-mkdir ${application_full_path}/docker/build
-mkdir $docker_nginx_dir
-mkdir $docker_php_dir
-
-docker_nginx_config="${docker_nginx_dir}/default.conf"
-docker_php_file="${docker_php_dir}/Dockerfile"
 
 cat > $docker_nginx_config <<EOF
 server {
@@ -132,3 +152,17 @@ WORKDIR /var/www/${application_name}/
 
 EXPOSE 9001
 EOF
+
+cp $application_full_path/.env $application_full_path/.env.dist
+cat > $init_file <<EOF
+#!/usr/bin/env bash
+
+cat .env.dist >> .env
+echo '.env.dist content added to .env file.'
+
+docker-compose down || true
+docker-compose build
+docker-compose up -d
+EOF
+
+chmod +x $init_file
