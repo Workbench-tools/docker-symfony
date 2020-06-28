@@ -19,6 +19,11 @@ help_option()
   exit 0;
 }
 
+if [[ $# -eq 0 ]] ; then
+    echo 'Please provide application name'
+    exit 1
+fi
+
 web=0
 application_full_path=$1
 
@@ -33,11 +38,6 @@ while [ "$1" != "" ]; do
     esac
     shift
 done
-
-if [ $1 = '' ]; then
-  echo 'Please provide application name'
-  exit 0;
-fi
 
 if [ $web = 0 ]; then
   symfony_application="symfony/skeleton"
