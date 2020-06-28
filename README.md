@@ -18,7 +18,7 @@ Install by running `./install.sh {/var/www/application-name}`. If you will be as
 CD into application folder `cd /var/www/application-name`
 
 Run `./init.sh` to build docker containers and run application. 
-Before you run this command have a look to `/var/www/application-name/docker-compose.yaml` file. If for example mysql runs on your machine default port 3306 this command will fail.
+Before you run this command have a look to `/var/www/application-name/docker-compose.yaml` file. If for example mysql runs on your machine default port 3306 this command will fail because of port conflict.
 
 Type in on your browser `localhost:8000` to see if your application up and running
 
