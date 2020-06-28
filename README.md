@@ -17,18 +17,18 @@ Install by running `./install.sh {/var/www/application-name}`. If you will be as
 
 This will install micro service based application. If you want website use `--web` option `./install.sh {/var/www/application-name} --web`. For more information use `--help` option.
 
-CD into application folder `cd /var/www/application-name`
+CD into application folder `cd /var/www/application-name`.
 
 Run `./init.sh` to build docker containers and run application. 
-Before you run this command have a look to `/var/www/application-name/docker-compose.yaml` file. If for example mysql runs on your machine default port 3306 this command will fail because of port conflict.
+Before you run this command have a look at `/var/www/application-name/docker-compose.yaml` file. If for example mysql runs on your machine default port 3306 this command will fail because of port conflict.
 
-Type in on your browser `localhost:8000` to see if your application up and running
+Type in your browser `localhost:8000` to see if your application up and running.
 
 ---
 
 ### Other information
 
-If you run command `./install.sh {/var/www/simple-application}`. All containers will be called `{php|mysql|nginx}_simple_application`.
+If you run command `./install.sh {/var/www/simple-application}`. All containers will be named by application name using underscores `{php|mysql|nginx}_simple_application`.
 
 | MySQL |       |
 | ----- | ----- |
