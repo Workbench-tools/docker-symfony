@@ -77,7 +77,7 @@ services:
             MYSQL_PASSWORD: root
             MYSQL_ROOT_PASSWORD: root
         ports:
-          - 3301:3306
+          - 3306:3306
         volumes:
           - ./docker/volumes/mysql/data:/var/lib/mysql
     php_${container_name}:
