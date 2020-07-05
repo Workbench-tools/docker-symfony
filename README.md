@@ -6,7 +6,7 @@ Setup and run Symfony application with PHP, NginX and MySQL using docker.
 ### Prerequisites
 This script was written primary for Ubuntu, for other OS this script may not work. 
 
-For successful installation following programs should run on your machine: `docker`, `docker-compose`, `ip`, `ifconfig`.
+For successful installation following programs should run on your machine: `docker`, `docker-compose`, `ip`, `ifconfig`, `composer`, `php`.
 
 ---
 

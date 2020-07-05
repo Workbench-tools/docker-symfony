@@ -50,6 +50,7 @@ echo 'Installation has started...'
 composer create-project $symfony_application $application_full_path
 cd $application_full_path
 composer require --dev symfony/phpunit-bridge
+php bin/phpunit
 
 application_name=$(basename $application_full_path)
 container_name="${application_name//-/_}"
