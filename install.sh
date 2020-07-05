@@ -213,10 +213,10 @@ class IndexControllerTest extends TestCase
 {
     public function testIndexController(): void
     {
-        $controller = new IndexController();
-        $controller->setContainer(new Container());
-        $response = $controller->index();
-        $this->assertInstanceOf(Response::class, $response);
+        \$controller = new IndexController();
+        \$controller->setContainer(new Container());
+        \$response = \$controller->index();
+        \$this->assertInstanceOf(Response::class, \$response);
     }
 }
 EOF
