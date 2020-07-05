@@ -64,6 +64,7 @@ composer require doctrine/annotations
 composer require --dev symfony/phpunit-bridge
 php bin/phpunit
 php bin/console make:controller IndexController
+php bin/console make:command IndexCommand
 
 application_name=$(basename $application_full_path)
 container_name="${application_name//-/_}"
