@@ -39,6 +39,16 @@ while [ "$1" != "" ]; do
     shift
 done
 
+echo 'Check requirements...'
+
+declare -a programs_list=("docker" "docker-compose" "ip" "ifconfig" "composer" "php" "awk")
+for program in ${programs_list[@]}; do
+  if [ ! command -v $program ]; then
+    echo "Program '$program' not found on your machine"
+    exit 1
+  fi
+done
+
 if [ $web = 0 ]; then
   symfony_application="symfony/skeleton"
 else
@@ -187,11 +197,10 @@ EOF
 cat > $application_full_path/gitignore <<EOF
 /.idea
 /docker/volumes/
-
 EOF
 
 cat .gitignore >> gitignore
-cp gitignore .gitignore
+cp $application_full_path/gitignore $application_full_path/.gitignore
 rm gitignore
 
 chmod +x $init_file
