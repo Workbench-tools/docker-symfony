@@ -12,7 +12,7 @@ For successful installation following programs should run on your machine: `dock
 
 ### Installation
 
-In terminal run `wget https://raw.githubusercontent.com/Workbench-tools/docker-symfony/master/install.sh` to download installation file.
+In terminal run `wget https://raw.githubusercontent.com/Workbench-tools/installs/master/docker-symfony/install.sh` to download installation file.
 
 Make downloaded file executable `sudo chmod +x install.sh`.
 
