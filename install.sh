@@ -59,20 +59,25 @@ echo 'Installation has started...'
 
 composer create-project $symfony_application $application_full_path
 cd $application_full_path
+composer require symfony/maker-bundle --dev
+composer require doctrine/annotations
 composer require --dev symfony/phpunit-bridge
 php bin/phpunit
+php bin/console make:controller IndexController
 
 application_name=$(basename $application_full_path)
 container_name="${application_name//-/_}"
 docker_compose_file="${application_full_path}/docker-compose.yml"
 docker_nginx_dir=${application_full_path}/docker/build/nginx/
 docker_php_dir=${application_full_path}/docker/build/php/
+tests_dir=${application_full_path}/tests/Controller
 init_file=${application_full_path}/bin/init.sh
 
 mkdir ${application_full_path}/docker
 mkdir ${application_full_path}/docker/build
 mkdir $docker_nginx_dir
 mkdir $docker_php_dir
+mkdir $tests_dir
 
 docker_nginx_config="${docker_nginx_dir}/default.conf"
 docker_php_file="${docker_php_dir}/Dockerfile"
@@ -98,7 +103,7 @@ services:
         build: ./docker/build/php
         tty: true
         environment:
-          PHP_IDE_CONFIG: serverName=nginx_${container_name}
+          PHP_IDE_CONFIG: serverName=php_${container_name}
           XDEBUG_CONFIG: remote_host=\${HOST_IP}
         depends_on:
             - mysql_${container_name}
@@ -192,6 +197,28 @@ echo '.env.dist content added to .env file.'
 docker-compose down || true
 docker-compose build
 docker-compose up -d
+EOF
+
+cat > $tests_dir/IndexControllerTest.php <<EOF
+<?php
+
+namespace App\Tests\Controller;
+
+use App\Controller\IndexController;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\HttpFoundation\Response;
+
+class IndexControllerTest extends TestCase
+{
+    public function testIndexController(): void
+    {
+        $controller = new IndexController();
+        $controller->setContainer(new Container());
+        $response = $controller->index();
+        $this->assertInstanceOf(Response::class, $response);
+    }
+}
 EOF
 
 cat > $application_full_path/gitignore <<EOF
