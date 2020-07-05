@@ -184,4 +184,14 @@ docker-compose build
 docker-compose up -d
 EOF
 
+cat > $application_full_path/gitignore <<EOF
+/.idea
+/docker/volumes/
+
+EOF
+
+cat .gitignore >> gitignore
+cp gitignore .gitignore
+rm gitignore
+
 chmod +x $init_file
