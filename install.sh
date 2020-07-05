@@ -48,13 +48,15 @@ fi
 echo 'Installation has started...'
 
 composer create-project $symfony_application $application_full_path
+cd $application_full_path
+composer require --dev symfony/phpunit-bridge
 
 application_name=$(basename $application_full_path)
 container_name="${application_name//-/_}"
 docker_compose_file="${application_full_path}/docker-compose.yml"
 docker_nginx_dir=${application_full_path}/docker/build/nginx/
 docker_php_dir=${application_full_path}/docker/build/php/
-init_file=${application_full_path}/init.sh
+init_file=${application_full_path}/bin/init.sh
 
 mkdir ${application_full_path}/docker
 mkdir ${application_full_path}/docker/build
@@ -84,6 +86,9 @@ services:
         container_name: php_${container_name}
         build: ./docker/build/php
         tty: true
+        environment:
+          PHP_IDE_CONFIG: serverName=nginx_${container_name}
+          XDEBUG_CONFIG: remote_host=\$\{HOST_IP\}
         depends_on:
             - mysql_${container_name}
         volumes:
@@ -149,8 +154,6 @@ RUN chmod +x /usr/local/bin/composer
 RUN pecl install xdebug && docker-php-ext-enable xdebug
 RUN echo 'xdebug.remote_port=9001' >> /usr/local/etc/php/php.ini
 RUN echo 'xdebug.remote_enable=1' >> /usr/local/etc/php/php.ini
-RUN echo 'xdebug.remote_autostart=1' >> /usr/local/etc/php/php.ini
-RUN echo 'xdebug.remote_connect_back=0' >> /usr/local/etc/php/php.ini
 RUN echo 'xdebug.idekey=PHPSTORM' >> /usr/local/etc/php/php.ini
 
 WORKDIR /var/www/${application_name}/
@@ -161,6 +164,16 @@ EOF
 cp $application_full_path/.env $application_full_path/.env.dist
 cat > $init_file <<EOF
 #!/usr/bin/env bash
+
+rm -rf .env
+
+export eth_interface=$(ip token | grep -v lo | grep -v br- | grep -v veth | grep -v docker | grep -v wlan | grep -v wlp | awk '{print $4}')
+export host_ip=$(ifconfig $eth_interface | grep inet | grep -v inet6 | awk '{print $2}')
+
+echo 'HOST_IP='$host_ip >> .env
+echo '' >> .env
+
+echo 'Host ip' $host_ip 'added to .env file.'
 
 cat .env.dist >> .env
 echo '.env.dist content added to .env file.'
