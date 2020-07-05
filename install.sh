@@ -89,7 +89,7 @@ services:
         tty: true
         environment:
           PHP_IDE_CONFIG: serverName=nginx_${container_name}
-          XDEBUG_CONFIG: remote_host=\$\{HOST_IP\}
+          XDEBUG_CONFIG: remote_host=\${HOST_IP}
         depends_on:
             - mysql_${container_name}
         volumes:
