@@ -39,11 +39,11 @@ while [ "$1" != "" ]; do
     shift
 done
 
-echo 'Check requirements...'
+echo 'Checking requirements...'
 
 declare -a programs_list=("docker" "docker-compose" "ip" "ifconfig" "composer" "php" "awk")
 for program in ${programs_list[@]}; do
-  if [ ! command -v $program ]; then
+  if ! command -v $program ; then
     echo "Program '$program' not found on your machine"
     exit 1
   fi
