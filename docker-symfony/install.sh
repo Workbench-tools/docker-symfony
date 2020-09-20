@@ -86,7 +86,7 @@ docker_php_file="${docker_php_dir}/Dockerfile"
 cat > $docker_compose_file <<EOF
 version: '3.5'
 services:
-    mysql_${container_name}:
+    mysql:
         container_name: mysql_${container_name}
         image: mysql:latest
         restart: on-failure
@@ -99,7 +99,7 @@ services:
           - 3306:3306
         volumes:
           - ./docker/volumes/mysql/data:/var/lib/mysql
-    php_${container_name}:
+    php:
         container_name: php_${container_name}
         build: ./docker/build/php
         tty: true
@@ -107,7 +107,7 @@ services:
           PHP_IDE_CONFIG: serverName=php_${container_name}
           XDEBUG_CONFIG: remote_host=\${HOST_IP}
         depends_on:
-            - mysql_${container_name}
+            - mysql
         volumes:
           - .:/var/www/${application_name}
     nginx_${container_name}:
@@ -120,14 +120,14 @@ services:
           - ./:/var/www/${application_name}
           - ./docker/build/nginx/default.conf:/etc/nginx/conf.d/default.conf
         depends_on:
-          - php_${container_name}
-          - mysql_${container_name}
+          - php
+          - mysql
 EOF
 
 cat > $docker_nginx_config <<EOF
 server {
     listen 80;
-    server_name nginx_${container_name};
+    server_name nginx;
     root /var/www/${application_name}/public;
     client_max_body_size 100M;
 
@@ -137,7 +137,7 @@ server {
 
     location ~ ^/index\\.php(/|$) {
         # Connect to the Docker service using php
-        fastcgi_pass php_${container_name}:9000;
+        fastcgi_pass php:9000;
         fastcgi_split_path_info ^(.+\\.php)(/.*)\$;
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME \$realpath_root\$fastcgi_script_name;
